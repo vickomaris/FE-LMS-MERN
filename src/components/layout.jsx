@@ -4,18 +4,19 @@ import Header from './header';
 import Courses from '../pages/manager/home/courses';
 import Students from '../pages/manager/home/students';
 import { Outlet, useMatch } from 'react-router-dom';
+import Proptypes from 'prop-types';
 
-export default function LayoutDashboard() {
-  const isPreviewPage = useMatch('/manager/courses/:id/preview');
+export default function LayoutDashboard({ isAdmin = true }) {
+  const isManagerPreviewPage = useMatch('/manager/courses/:id/preview');
+  const isStudentPreviewPage = useMatch('/student/detail-courses/:id');
 
-  console.log('isPreviewPage', isPreviewPage);
   return (
     <>
-      {isPreviewPage !== null ? (
+      {isManagerPreviewPage !== null || isStudentPreviewPage !== null ? (
         <Outlet />
       ) : (
         <>
-          <Sidebar />
+          <Sidebar isAdmin={isAdmin} />
           <main className="flex flex-col flex-1 gap-[30px] p-[30px] ml-[290px]">
             <Header />
             <Outlet />
@@ -25,3 +26,7 @@ export default function LayoutDashboard() {
     </>
   );
 }
+
+LayoutDashboard.propTypes = {
+  isAdmin: Proptypes.bool,
+};
